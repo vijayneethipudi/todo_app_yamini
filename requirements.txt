@@ -1,0 +1,5 @@
+fastapi[all]
+sqlalchemy
+db-sqlite3
+requests
+pymysql
