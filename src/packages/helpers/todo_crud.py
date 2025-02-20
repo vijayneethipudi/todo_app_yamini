@@ -13,6 +13,7 @@ class TodoCrud:
         self.logger = logger
 
     def get_all_todos(self) -> Union[List[todo_tables.TodoItem], None]:
+        """get all todos"""
         try:
             result = self.db.query(todo_tables.TodoItem).all()
             return result
@@ -22,6 +23,7 @@ class TodoCrud:
             raise exc_info
 
     def get_todo_by_id(self, todo_id: int) -> Union[todo_tables.TodoItem, None]:
+        """Get todo by id"""
         try:
             result = self.db.query(todo_tables.TodoItem).filter(todo_tables.TodoItem.id == todo_id).first()
             if not result:
@@ -33,9 +35,15 @@ class TodoCrud:
         except Exception as exc_info:
             raise exc_info
 
-    def create_todo(self):
+    def create_todo(self, todo: todo_schemas.TodoCreate):
+        """Create Todo"""
         try:
-            pass
+            db_todo = todo_tables.TodoItem(**todo.model_dump())
+            self.db.add(db_todo)
+            self.db.commit()
+            self.db.refresh(db_todo)
+            self.logger.info(f"Todo added successfully with id: {db_todo.id}")
+            return db_todo
         except SQLAlchemyError as exc_info:
             raise exc_info
         except Exception as exc_info:

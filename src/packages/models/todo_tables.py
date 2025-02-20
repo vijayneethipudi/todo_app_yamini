@@ -5,7 +5,7 @@ from packages.database.database import Base
 
 
 class TodoItem(Base):
-    __tablename__ = "todo_items"
+    __tablename__ = "todo_items_yamini"
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(255), index=True)
