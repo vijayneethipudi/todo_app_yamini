@@ -32,4 +32,4 @@ standard: int (1 - 5)
 ```
 
 ## Task
-Create Employee CRUD App
+Create Student CRUD App
