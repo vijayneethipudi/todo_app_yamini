@@ -49,17 +49,33 @@ class TodoCrud:
         except Exception as exc_info:
             raise exc_info
 
-    def update_todo(self):
+    def update_todo(self, todo_id: int, todo: todo_schemas.TodoUpdate):
+        """Update todo"""
         try:
-            pass
+            db_todo = self.get_todo_by_id(todo_id)
+            if not db_todo:
+                raise Exception(f"Todo not found with id: {todo_id}")
+            self.logger.info(f"Todo found with id: {todo_id}")
+            for key, value in todo.model_dump().items():
+                setattr(db_todo, key, value)
+            self.db.commit()
+            self.db.refresh(db_todo)
+            return db_todo
         except SQLAlchemyError as exc_info:
             raise exc_info
         except Exception as exc_info:
             raise exc_info
 
-    def delete_todo(self):
+    def delete_todo(self, todo_id: int):
+        """Delete todo"""
         try:
-            pass
+            db_todo = self.get_todo_by_id(todo_id)
+            if not db_todo:
+                raise Exception(f"Todo not found with id: {todo_id}")
+            self.db.delete(db_todo)
+            self.db.commit()
+            self.logger.info(f"Todo delete sucessfully with id: {todo_id}")
+            return db_todo
         except SQLAlchemyError as exc_info:
             raise exc_info
         except Exception as exc_info:

@@ -41,17 +41,18 @@ def create_todo(todo: todo_schemas.TodoCreate, db: Session = Depends(get_db)):
 
 
 @router.put("/{todo_id}")
-def update_todo(db: Session = Depends(get_db)):
+def update_todo(todo_id: int, todo: todo_schemas.TodoUpdate, db: Session = Depends(get_db)):
     try:
-
-        pass
+        todo_obj = TodoCrud(db=db, logger=logging)
+        return todo_obj.update_todo(todo_id, todo)
     except Exception as exc_info:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(exc_info))
 
 
 @router.delete("/{todo_id}")
-def delete_todo(db: Session = Depends(get_db)):
+def delete_todo(todo_id: int, db: Session = Depends(get_db)):
     try:
-        pass
+        todo_obj = TodoCrud(db=db, logger=logging)
+        return todo_obj.delete_todo(todo_id=todo_id)
     except Exception as exc_info:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(exc_info))
